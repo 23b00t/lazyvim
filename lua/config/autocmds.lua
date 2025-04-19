@@ -10,8 +10,6 @@
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
-    -- enable spellchecking globally
-    vim.opt.spell = true
     -- try to apply spell checking to strings and comments
     vim.cmd("syntax spell toplevel")
   end,

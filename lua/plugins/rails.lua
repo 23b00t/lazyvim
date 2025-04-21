@@ -1,23 +1,5 @@
 return {
-  --   {
-  --     "tpope/vim-rails",
-  --     cmd = { -- Plugin wird nur für diese Befehle geladen
-  --       "Eview",
-  --       "Econtroller",
-  --       "Emodel",
-  --       "Smodel",
-  --       "Sview",
-  --       "Scontroller",
-  --       "Vmodel",
-  --       "Vview",
-  --       "Vcontroller",
-  --       "Tmodel",
-  --       "Tview",
-  --       "Tcontroller",
-  --       "Rails",
-  --       "Generate",
-  --       "Runner",
-  --       "Extract",
-  --     },
-  --   },
+  {
+    "tpope/vim-rails",
+  },
 }

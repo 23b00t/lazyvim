@@ -7,4 +7,8 @@
 -- vim.g.lazyvim_ruby_lsp = "solargraph"
 -- vim.g.lazyvim_ruby_formatter = "rubocop"
 
+-- Enable spell checking
 vim.opt.spelllang = { "en_us", "de" }
+
+-- Disable autoformat (format on save)
+vim.g.autoformat = false

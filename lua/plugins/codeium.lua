@@ -2,7 +2,13 @@ return {
   -- https://github.com/Exafunction/codeium.vim
   {
     "Exafunction/windsurf.vim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
     config = function()
+      -- unmap Accept suggestion by tab
+      vim.g.codeium_no_map_tab = true
       -- Accept suggestion
       vim.keymap.set("i", "<M-s>", function()
         return vim.fn["codeium#Accept"]()

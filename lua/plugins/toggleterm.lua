@@ -1,13 +1,8 @@
 return {
+  -- { "akinsho/toggleterm.nvim", version = "*", config = true },
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    opts = {
-      shell = vim.fn.executable("zsh") == 1 and "zsh" or vim.o.shell,
-      direction = "horizontal",
-      start_in_insert = true,
-      persist_mode = true,
-    },
     config = function(_, opts)
       local toggleterm = require("toggleterm")
       toggleterm.setup(opts)
@@ -19,14 +14,14 @@ return {
         direction = "horizontal",
         hidden = true,
         count = 1,
-        size = math.floor(vim.o.lines * 0.4),
+        size = { height = 0.4 },
       })
 
       local term2 = Terminal:new({
         direction = "vertical",
         hidden = true,
         count = 2,
-        size = 120,
+        size = { width = 0.4 },
       })
 
       local term3 = Terminal:new({

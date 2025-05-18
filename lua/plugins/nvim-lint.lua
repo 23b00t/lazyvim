@@ -4,16 +4,18 @@ return {
     optional = true,
     opts = {
       linters_by_ft = {
-        php = { "phpcs" },
+        php = { "phpstan" },
       },
       linters = {
-        phpcs = {
-          args = {
-            "-q",
-            "--standard=PSR2",
-            "--report=json",
-            "-"
-          },
+        phpstan = {
+          cmd = "phpstan",
+          args = { "analyze", "--error-format=raw", "--no-progress", "src" },
+          stdin = false,
+          stream = "stdout",
+          ignore_exitcode = true,
+          parser = require("lint.parser").from_errorformat("%f:%l:%c: %m", {
+            source = "phpstan",
+          }),
         },
       },
     },

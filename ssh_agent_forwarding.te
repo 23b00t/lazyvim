@@ -1,0 +1,11 @@
+
+module ssh_agent_forwarding 1.0;
+
+require {
+	type container_t;
+	type unconfined_t;
+	class unix_stream_socket connectto;
+}
+
+#============= container_t ==============
+allow container_t unconfined_t:unix_stream_socket connectto;

@@ -14,7 +14,7 @@ vim.opt.spelllang = { "en_us", "de" }
 vim.g.autoformat = false
 
 -- set zsh as default shell
-vim.opt.shell = "/usr/bin/zsh"
+vim.opt.shell = "zsh"
 
 -- Set to "intelephense" to use intelephense instead of phpactor.
 vim.g.lazyvim_php_lsp = "intelephense"

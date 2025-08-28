@@ -15,7 +15,7 @@ return {
         hidden = true,
         count = 1,
         size = { height = 0.4 },
-        shell = "/usr/bin/zsh",
+        shell = "zsh",
       })
 
       local term2 = Terminal:new({
@@ -23,14 +23,14 @@ return {
         hidden = true,
         count = 2,
         size = { width = 0.4 },
-        shell = "/usr/bin/zsh",
+        shell = "zsh",
       })
 
       local term3 = Terminal:new({
         direction = "float",
         hidden = true,
         count = 3,
-        shell = "/usr/bin/zsh",
+        shell = "zsh",
       })
 
       -- Keymaps toggle these exact instances

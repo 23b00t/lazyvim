@@ -15,7 +15,7 @@ return {
         command = "/var/home/nx/.config/composer/vendor/bin/phpstan",  -- Der Befehl für PHPStan
         args = {
           "analyse",  -- PHPStan im Analyse-Modus ausführen
-          "--configuration", "/home/devuser/code/il_9/ilias_9/CI/PHPStan/phpstan.neon",  -- Dein spezifischer PHPStan-Konfigurationspfad
+          "--configuration", "/home/nx/code/il_9/ilias_9/CI/PHPStan/phpstan.neon",  -- Dein spezifischer PHPStan-Konfigurationspfad
           "--level", "max",  -- Setzt die Strenge von PHPStan auf maximal
           "--", ".",    -- Das aktuelle Verzeichnis als Analyse-Pfad
         },

@@ -12,7 +12,7 @@ return {
 
       -- Füge PHPStan als Linter hinzu
       table.insert(opts.sources, nls.builtins.diagnostics.phpstan.with({
-        command = "/var/home/nx/.config/composer/vendor/bin/phpstan",  -- Der Befehl für PHPStan
+        command = "/home/nx/bin/phpstan",  -- Der Befehl für PHPStan
         args = {
           "analyse",  -- PHPStan im Analyse-Modus ausführen
           "--configuration", "/home/nx/code/il_9/ilias_9/CI/PHPStan/phpstan.neon",  -- Dein spezifischer PHPStan-Konfigurationspfad

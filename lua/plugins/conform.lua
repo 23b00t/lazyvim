@@ -8,7 +8,7 @@ return {
         eruby = { "erb_format" },
         -- php = { "php_cs_fixer_custom" }, -- benutzerdefinierter Formatter-Name
         -- php = { "php_cs_fixer" },
-        php = { "phpstan" }
+        -- php = { "phpstan" }
       },
     --   formatters = {
     --     php_cs_fixer_custom = {

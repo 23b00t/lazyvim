@@ -2,9 +2,9 @@ return {
 	{
 		"nvimtools/none-ls.nvim",
 		opts = function(_, opts)
-			-- remove all php-related sources so only nvim-lint runs
+			-- remove all sources that support the php filetype
 			opts.sources = vim.tbl_filter(function(src)
-				return not (src.name == "phpcs" or src.name == "phpstan" or src.name == "phpmd")
+				return not (src.filetypes and vim.tbl_contains(src.filetypes, "php"))
 			end, opts.sources or {})
 		end,
 	},

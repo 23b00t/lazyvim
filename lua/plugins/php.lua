@@ -99,39 +99,6 @@ return {
 						-- "--configuration=" .. phpstan_config,
 					},
 					ignore_exitcode = true,
-					-- Dein existierender Parser ist großartig und wird hier beibehalten.
-					parser = function(output, bufnr)
-						if not output or vim.trim(output) == "" then
-							return {}
-						end
-						local json_output = output:gsub("Warning: .-\n", "")
-						local ok, data = pcall(vim.json.decode, json_output)
-						if not ok or not data.files then
-							return {}
-						end
-						local bufname = vim.api.nvim_buf_get_name(bufnr)
-						local file
-						for k, v in pairs(data.files) do
-							if k == bufname or k:match(vim.fn.fnamemodify(bufname, ":p")) then
-								file = v
-								break
-							end
-						end
-						if not file then
-							return {}
-						end
-						local diagnostics = {}
-						for _, message in ipairs(file.messages or {}) do
-							table.insert(diagnostics, {
-								lnum = type(message.line) == "number" and (message.line - 1) or 0,
-								col = 0,
-								message = message.message,
-								source = "phpstan",
-								code = message.identifier,
-							})
-						end
-						return diagnostics
-					end,
 				}
 			end
 

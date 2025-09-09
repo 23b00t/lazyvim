@@ -12,6 +12,9 @@ vim.opt.spelllang = { "en_us", "de" }
 
 -- Disable autoformat (format on save)
 vim.g.autoformat = false
+-- But enable autoindent
+-- vim.opt.autoindent = true
+
 
 -- set zsh as default shell
 vim.opt.shell = "zsh"

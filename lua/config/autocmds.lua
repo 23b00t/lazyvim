@@ -8,9 +8,9 @@
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "*",
-  callback = function()
-    -- try to apply spell checking to strings and comments
-    vim.cmd("syntax spell toplevel")
-  end,
+	pattern = "*",
+	callback = function()
+		-- try to apply spell checking to strings and comments
+		vim.cmd("syntax spell toplevel")
+	end,
 })

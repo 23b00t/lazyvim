@@ -106,78 +106,78 @@ return {
 		end,
 	},
 
-	{
-		"neovim/nvim-lspconfig",
-		opts = {
-			servers = {
-				intelephense = {
-					root_dir = function(fname)
-						-- Suche vom aktuellen File aufwärts nach einem dieser Marker.
-						-- Das stellt sicher, dass immer das Haupt-ILIAS-Verzeichnis als
-						-- Projekt-Root erkannt wird, egal wie tief du in einem Plugin arbeitest.
-						local root_markers = { "ilias.php", "ilias.ini.php" }
-						local root_dir = require("lspconfig.util").root_pattern(unpack(root_markers))(fname)
-
-						-- Fallback: Wenn kein Marker gefunden wird, nutze das Standardverhalten.
-						return root_dir or require("lspconfig.util").find_git_ancestor(fname)
-					end,
-					settings = {
-						intelephense = {
-							telemetry = { enable = false },
-
-							files = {
-								-- Wir überschreiben die Standard-Ausschlussliste,
-								-- um den 'vendor'-Ordner explizit NICHT auszuschließen.
-								exclude = {
-									"**/.git/**",
-									"**/.svn/**",
-									"**/.hg/**",
-									"**/CVS/**",
-									"**/.DS_Store/**",
-									"**/node_modules/**",
-									"**/bower_components/**",
-									-- Der wichtige Punkt: "**/vendor/**" fehlt hier.
-								},
-								-- Das Limit für die Dateigröße erhöhen, falls nötig.
-								maxSize = 2000000,
-							},
-
-							environment = {
-								phpVersion = "8.2",
-								includePaths = { "Services", "Modules", "libs" },
-							},
-
-							-- Der Rest der Einstellungen bleibt wie gehabt
-							diagnostics = {
-								enable = true,
-								run = "onSave",
-								deprecated = true,
-								undefinedSymbols = true,
-								undefinedVariables = true,
-								undefinedProperties = true,
-								undefinedMethods = true,
-								unusedSymbols = true,
-								nonexistentFile = true,
-								caseSensitive = true,
-								strictTypes = true,
-								strictKeyCheck = true,
-								duplicateSymbols = true,
-							},
-							completion = {
-								enable = true,
-								triggerParameterHints = true,
-								insertUseDeclaration = true,
-								fullyQualifyGlobalConstants = true,
-								fullyQualifyGlobalFunctions = true,
-								phpdoc = { enable = true, text = true },
-								quickPick = { enable = true },
-							},
-							format = { enable = true, braces = "psr12" },
-							rename = { enable = true },
-						},
-					},
-				},
-			},
-		},
-	},
+	-- {
+	-- 	"neovim/nvim-lspconfig",
+	-- 	opts = {
+	-- 		servers = {
+	-- 			intelephense = {
+	-- 				root_dir = function(fname)
+	-- 					-- Suche vom aktuellen File aufwärts nach einem dieser Marker.
+	-- 					-- Das stellt sicher, dass immer das Haupt-ILIAS-Verzeichnis als
+	-- 					-- Projekt-Root erkannt wird, egal wie tief du in einem Plugin arbeitest.
+	-- 					local root_markers = { "ilias.php", "ilias.ini.php" }
+	-- 					local root_dir = require("lspconfig.util").root_pattern(unpack(root_markers))(fname)
+	--
+	-- 					-- Fallback: Wenn kein Marker gefunden wird, nutze das Standardverhalten.
+	-- 					return root_dir or require("lspconfig.util").find_git_ancestor(fname)
+	-- 				end,
+	-- 				settings = {
+	-- 					intelephense = {
+	-- 						telemetry = { enable = false },
+	--
+	-- 						files = {
+	-- 							-- Wir überschreiben die Standard-Ausschlussliste,
+	-- 							-- um den 'vendor'-Ordner explizit NICHT auszuschließen.
+	-- 							exclude = {
+	-- 								"**/.git/**",
+	-- 								"**/.svn/**",
+	-- 								"**/.hg/**",
+	-- 								"**/CVS/**",
+	-- 								"**/.DS_Store/**",
+	-- 								"**/node_modules/**",
+	-- 								"**/bower_components/**",
+	-- 								-- Der wichtige Punkt: "**/vendor/**" fehlt hier.
+	-- 							},
+	-- 							-- Das Limit für die Dateigröße erhöhen, falls nötig.
+	-- 							maxSize = 2000000,
+	-- 						},
+	--
+	-- 						environment = {
+	-- 							phpVersion = "8.2",
+	-- 							includePaths = { "Services", "Modules", "libs" },
+	-- 						},
+	--
+	-- 						-- Der Rest der Einstellungen bleibt wie gehabt
+	-- 						diagnostics = {
+	-- 							enable = true,
+	-- 							run = "onSave",
+	-- 							deprecated = true,
+	-- 							undefinedSymbols = true,
+	-- 							undefinedVariables = true,
+	-- 							undefinedProperties = true,
+	-- 							undefinedMethods = true,
+	-- 							unusedSymbols = true,
+	-- 							nonexistentFile = true,
+	-- 							caseSensitive = true,
+	-- 							strictTypes = true,
+	-- 							strictKeyCheck = true,
+	-- 							duplicateSymbols = true,
+	-- 						},
+	-- 						completion = {
+	-- 							enable = true,
+	-- 							triggerParameterHints = true,
+	-- 							insertUseDeclaration = true,
+	-- 							fullyQualifyGlobalConstants = true,
+	-- 							fullyQualifyGlobalFunctions = true,
+	-- 							phpdoc = { enable = true, text = true },
+	-- 							quickPick = { enable = true },
+	-- 						},
+	-- 						format = { enable = true, braces = "psr12" },
+	-- 						rename = { enable = true },
+	-- 					},
+	-- 				},
+	-- 			},
+	-- 		},
+	-- 	},
+	-- },
 }

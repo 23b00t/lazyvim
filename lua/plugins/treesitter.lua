@@ -1,5 +1,5 @@
 return {
-  {
+  -- {
   --   "nvim-treesitter/nvim-treesitter",
   --   -- Wir hängen uns an nvim-treesitter, da es immer für PHP geladen wird.
   --   config = function()

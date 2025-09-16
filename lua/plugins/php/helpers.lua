@@ -5,9 +5,7 @@ local M = {}
 M.is_ilias_project = function()
 	local ilias_markers = {
 		"ilias.php",
-		"Services",
-		"Modules",
-		"setup",
+		"ilias.ini.php",
 	}
 
 	local current_dir = vim.fn.getcwd()
@@ -37,6 +35,23 @@ M.php_version = function()
 	return nil
 end
 
+local function get_ilias_major_version(filepath)
+	local file = io.open(filepath, "r")
+	if not file then
+		return nil
+	end
+	local last_line
+	for line in file:lines() do
+		last_line = line
+	end
+	file:close()
+	if last_line then
+		local major = last_line:match('ILIAS_VERSION_NUMERIC%s*=%s*"(%d+)%.%d+"')
+		return major and tonumber(major) or nil
+	end
+	return nil
+end
+
 M.in_ilias, M.ilias_root = M.is_ilias_project()
 M.phpstan_config = nil
 M.phpstan_bin = "phpstan"
@@ -45,30 +60,39 @@ M.php_cs_fixer_config = nil
 M.phpcs_bin = "phpcs"
 M.phpcs_standard = "PSR12"
 
--- TODO: Add path for ILIAS 10
+local major_version = get_ilias_major_version(M.ilias_root .. "/ilias_version.php")
+if not major_version then
+  major_version = get_ilias_major_version(M.ilias_root .. "/include/inc.ilias_version.php")
+end
+
+M.composer_base = "/vendor"
+if major_version and major_version < 10 then
+	M.composer_base = "/libs"
+end
+
 if M.in_ilias then
 	if vim.fn.filereadable(M.ilias_root .. "../phpstan.neon") == 1 then
 		M.phpstan_config = M.ilias_root .. "/../phpstan.neon"
 	end
 
-	if vim.fn.executable(M.ilias_root .. "/libs/composer/vendor/bin/phpstan") == 1 then
-		M.phpstan_bin = M.ilias_root .. "/libs/composer/vendor/bin/phpstan"
+	if vim.fn.executable(M.ilias_root .. M.composer_base .. "/composer/vendor/bin/phpstan") == 1 then
+		M.phpstan_bin = M.ilias_root .. M.composer_base .. "/composer/vendor/bin/phpstan"
 	end
 
-	if vim.fn.executable(M.ilias_root .. "/libs/composer/vendor/bin/php-cs-fixer") == 1 then
-		M.php_cs_fixer_bin = M.ilias_root .. "/libs/composer/vendor/bin/php-cs-fixer"
+	if vim.fn.executable(M.ilias_root .. M.composer_base .. "/composer/vendor/bin/php-cs-fixer") == 1 then
+		M.php_cs_fixer_bin = M.ilias_root .. M.composer_base .. "/composer/vendor/bin/php-cs-fixer"
 	end
 
 	if vim.fn.filereadable(M.ilias_root .. "/CI/PHP-CS-FIXER/code-format.php_cs") == 1 then
 		M.php_cs_fixer_config = "--config=" .. M.ilias_root .. "/CI/PHP-CS-FIXER/code-format.php_cs"
 	end
 
-	if vim.fn.executable(M.ilias_root .. "/libs/composer/vendor/bin/phpcs") == 1 then
-		M.phpcs_bin = M.ilias_root .. "/libs/composer/vendor/bin/phpcs"
+	if vim.fn.executable(M.ilias_root .. M.composer_base .. "/composer/vendor/bin/phpcs") == 1 then
+		M.phpcs_bin = M.ilias_root .. M.composer_base .. "/composer/vendor/bin/phpcs"
 	end
 
-	if vim.fn.filereadable(M.ilias_root .. "/libs/composer/vendor/captainhook/captainhook/phpcs.xml") == 1 then
-		-- M.phpcs_standard = M.ilias_root .. "/libs/composer/vendor/captainhook/captainhook/phpcs.xml"
+	if vim.fn.filereadable(M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml") == 1 then
+		-- M.phpcs_standard = M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml"
 		M.phpcs_standard = M.ilias_root .. "/../phpcs.xml"
 	end
 end

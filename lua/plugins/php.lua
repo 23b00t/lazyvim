@@ -1,5 +1,6 @@
 -- lua/plugins/php.lua
 -- NOTE: Entry point for lua/plugins/php/*
+
 local function require_php_modules()
   local modules = {}
   local module_names = {

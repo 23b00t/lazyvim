@@ -60,17 +60,17 @@ M.php_cs_fixer_config = nil
 M.phpcs_bin = "phpcs"
 M.phpcs_standard = "PSR12"
 
-local major_version = get_ilias_major_version(M.ilias_root .. "/ilias_version.php")
-if not major_version then
-  major_version = get_ilias_major_version(M.ilias_root .. "/include/inc.ilias_version.php")
-end
-
-M.composer_base = "/vendor"
-if major_version and major_version < 10 then
-	M.composer_base = "/libs"
-end
-
 if M.in_ilias then
+	local major_version = get_ilias_major_version(M.ilias_root .. "/ilias_version.php")
+	if not major_version then
+		major_version = get_ilias_major_version(M.ilias_root .. "/include/inc.ilias_version.php")
+	end
+
+	M.composer_base = "/vendor"
+	if major_version and major_version < 10 then
+		M.composer_base = "/libs"
+	end
+
 	if vim.fn.filereadable(M.ilias_root .. "../phpstan.neon") == 1 then
 		M.phpstan_config = M.ilias_root .. "/../phpstan.neon"
 	end
@@ -91,7 +91,10 @@ if M.in_ilias then
 		M.phpcs_bin = M.ilias_root .. M.composer_base .. "/composer/vendor/bin/phpcs"
 	end
 
-	if vim.fn.filereadable(M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml") == 1 then
+	if
+		vim.fn.filereadable(M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml")
+		== 1
+	then
 		-- M.phpcs_standard = M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml"
 		M.phpcs_standard = M.ilias_root .. "/../phpcs.xml"
 	end

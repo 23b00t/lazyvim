@@ -14,7 +14,7 @@ local function require_php_modules()
     if ok then
       table.insert(modules, mod)
     else
-      vim.notify("Error loading: " .. name)
+      vim.notify("Error loading: " .. name .. "\nCause: " .. tostring(mod), vim.log.levels.ERROR)
     end
   end
   return modules

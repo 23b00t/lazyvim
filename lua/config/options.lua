@@ -15,9 +15,11 @@ vim.g.autoformat = false
 -- But enable autoindent
 -- vim.opt.autoindent = true
 
-
 -- set zsh as default shell
 vim.opt.shell = "zsh"
 
 -- Set to "intelephense" to use intelephense instead of phpactor.
 vim.g.lazyvim_php_lsp = "intelephense"
+
+-- disable swap files 
+vim.opt.swapfile = false

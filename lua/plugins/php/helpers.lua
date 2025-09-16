@@ -23,10 +23,10 @@ M.is_ilias_project = function()
 	return false, nil
 end
 
---- Function to get PHP version 
+--- Function to get PHP version
 --- @return string|nil: PHP version or nil if not found
 M.php_version = function()
-	local handle = io.popen("php -v")
+	local handle = io.popen("php -v 2>/dev/null")
 	if handle then
 		local result = handle:read("*a")
 		handle:close()

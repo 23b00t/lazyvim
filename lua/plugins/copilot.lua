@@ -17,7 +17,7 @@ return {
           prev = "<A-b>", -- Go to the previous suggestion
           dismiss = "<C-c>", -- Dismiss the current suggestion
           accept_word = "<A-w>", -- Accept the current word
-          accept_line = "<A-e>", -- Accept the current line
+          accept_line = "<A-l>", -- Accept the current line
         },
       },
       panel = {

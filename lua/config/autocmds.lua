@@ -28,60 +28,35 @@ end
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 
 -- Set cmd to .git of current buffer (for nested git repos)
-local uv = vim.loop
-local sep = package.config:sub(1,1)
-
-local function exists(path)
-  return uv.fs_stat(path) ~= nil
-end
-
--- Suche rekursiv nach dem nächsten Parent, der eine .git Datei/Ordner enthält.
--- startpath muss ein absolutes Verzeichnis sein.
-local function find_git_root(startpath)
-  if not startpath or startpath == "" then
-    return nil
-  end
-
-  local path = vim.fn.fnamemodify(startpath, ":p")
-  local prev = ""
-
-  while path ~= prev do
-    if exists(path .. sep .. ".git") then
-      return vim.fn.fnamemodify(path, ":p")
-    end
-    prev = path
-    path = vim.fn.fnamemodify(path .. sep .. "..", ":p")
-  end
-
-  return nil
-end
-
-local function set_cwd_to_git_parent()
+-- Simple autocmd: determines the directory of the current file,
+-- asks git with -C <dir> for the repo root and sets the cwd if found.
+local function set_cwd_to_buffer_git_root()
   local bufname = vim.api.nvim_buf_get_name(0)
-  if not bufname or bufname == "" then
+  if bufname == nil or bufname == "" then
     return
   end
 
-  local startdir = vim.fn.fnamemodify(bufname, ":p:h")
-  if startdir == "" then
+  local dir = vim.fn.expand('%:p:h')
+  if dir == nil or dir == "" then
     return
   end
 
-  local git_root = find_git_root(startdir)
-  if git_root and git_root ~= "" then
-    -- Nur setzen, wenn sich das cwd tatsächlich ändert (kleine Optimierung)
-    local cwd = vim.loop.cwd()
-    if cwd ~= git_root then
+  -- Ask git for the root, without changing the global cwd
+  local output = vim.fn.systemlist({ "git", "-C", dir, "rev-parse", "--show-toplevel" })
+  if vim.v.shell_error == 0 and output and output[1] and output[1] ~= "" then
+    local git_root = vim.fn.fnamemodify(output[1], ":p")
+    local ok, cur = pcall(vim.loop.cwd)
+    if not ok then cur = "" end
+    if cur ~= git_root then
       pcall(vim.api.nvim_set_current_dir, git_root)
-      -- vim.notify("cwd → " .. git_root, vim.log.levels.INFO, { title = "Project CWD" })
     end
   end
-  -- Wenn kein .git gefunden wurde: nichts machen
+  -- If no git root was found: do nothing
 end
 
--- Autocmd: bei Buffer- und Window-Enter das cwd ggf. setzen
+-- Autocmd: on Buffer and Window enter, set cwd to git root if applicable
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   callback = function()
-    set_cwd_to_git_parent()
+    set_cwd_to_buffer_git_root()
   end,
 })

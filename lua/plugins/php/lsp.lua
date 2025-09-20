@@ -2,13 +2,17 @@ local helpers = require("plugins.php.helpers")
 
 return {
 	"neovim/nvim-lspconfig",
+	dependencies = { "mason-org/mason-lspconfig.nvim" },
 	opts = function(_, opts)
-		-- Activate Codlense
-		opts.codelens = {
-			enabled = true,
-		}
-
-		opts.servers.intelephense = {
+		opts.servers.phpactor = false
+		-- manual setup
+		local lspconfig = require("lspconfig")
+		lspconfig.intelephense.setup({
+			filetypes = { "php" },
+			root_dir = function(_)
+				-- force to cwd
+				return vim.loop.fs_realpath(vim.fn.getcwd())
+			end,
 			settings = {
 				intelephense = {
 					references = {
@@ -101,7 +105,6 @@ return {
 							"**/.DS_Store/**",
 							"**/node_modules/**",
 							"**/bower_components/**",
-							-- NOTE: Didn't exclude vendor
 						},
 						maxSize = 20000000,
 					},
@@ -109,7 +112,16 @@ return {
 					environment = {
 						phpVersion = helpers.php_version() or "8.1",
 						-- TODO: Add more path?
-						includePaths = { "Services", "Modules", "libs" },
+						includePaths = {
+							"Services",
+							"Modules",
+							"libs",
+							"src",
+							"components",
+							"vendor",
+							"Customizing/global/plugins",
+							"setup",
+						},
 					},
 
 					-- Der Rest der Einstellungen bleibt wie gehabt
@@ -141,7 +153,7 @@ return {
 					rename = { enable = true },
 				},
 			},
-		}
+		})
 		return opts
 	end,
 }

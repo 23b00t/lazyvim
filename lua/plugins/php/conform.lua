@@ -11,16 +11,14 @@ return {
 		opts.formatters.php_cs_fixer = {
 			command = helpers.php_cs_fixer_bin,
 			args = {
-        "--rules=@PSR12",
-        -- NOTE: ILIAS rules are not satisfying
-        -- helpers.php_cs_fixer_config and helpers.php_cs_fixer_config,
+        -- "--rules=@PSR12",
+        "--config=" .. (helpers.php_cs_fixer_config or ""),
         "--using-cache=no",
 				"fix",
 				"$FILENAME",
 				"--quiet",
 			},
-			stdin = false, -- Wichtig: Benötigt Dateipfad, nicht stdin
-			-- ILIAS nutzt oft LF, falls dein Editor was anderes versucht
+			stdin = false,
 			line_ending = "lf",
 		}
 

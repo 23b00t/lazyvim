@@ -16,47 +16,33 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 function _G.set_terminal_keymaps()
-  local opts = {buffer = 0}
-  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+	local opts = { buffer = 0 }
+	vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
+	vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
+	vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
+	vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
+	vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
--- Set cmd to .git of current buffer (for nested git repos)
--- Simple autocmd: determines the directory of the current file,
--- asks git with -C <dir> for the repo root and sets the cwd if found.
-local function set_cwd_to_buffer_git_root()
-  local bufname = vim.api.nvim_buf_get_name(0)
-  if bufname == nil or bufname == "" then
-    return
-  end
+-- php fix
+local group = vim.api.nvim_create_augroup("PHPIndentFix", { clear = true })
 
-  local dir = vim.fn.expand('%:p:h')
-  if dir == nil or dir == "" then
-    return
-  end
-
-  -- Ask git for the root, without changing the global cwd
-  local output = vim.fn.systemlist({ "git", "-C", dir, "rev-parse", "--show-toplevel" })
-  if vim.v.shell_error == 0 and output and output[1] and output[1] ~= "" then
-    local git_root = vim.fn.fnamemodify(output[1], ":p")
-    local ok, cur = pcall(vim.loop.cwd)
-    if not ok then cur = "" end
-    if cur ~= git_root then
-      pcall(vim.api.nvim_set_current_dir, git_root)
-    end
-  end
-  -- If no git root was found: do nothing
-end
-
--- Autocmd: on Buffer and Window enter, set cwd to git root if applicable
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-  callback = function()
-    set_cwd_to_buffer_git_root()
-  end,
+vim.api.nvim_create_autocmd("FileType", {
+	group = group,
+	pattern = "php",
+	callback = function()
+		-- Verzögerung, um sicherzustellen, dass unsere Einstellungen nach
+		-- allen anderen Initialisierungen angewendet werden
+		vim.defer_fn(function()
+			-- Nur das TreeSitter-Indenting deaktivieren, nicht die ganze Funktionalität
+			vim.bo.indentexpr = "" -- Entferne das TreeSitter Indent-Expression
+			vim.bo.autoindent = true
+			vim.bo.cindent = false
+			vim.bo.smartindent = true
+			vim.bo.shiftwidth = 4
+		end, 10)
+	end,
 })

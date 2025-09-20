@@ -83,8 +83,10 @@ if M.in_ilias then
 		M.php_cs_fixer_bin = M.ilias_root .. M.composer_base .. "/composer/vendor/bin/php-cs-fixer"
 	end
 
-	if vim.fn.filereadable(M.ilias_root .. "/CI/PHP-CS-FIXER/code-format.php_cs") == 1 then
-		M.php_cs_fixer_config = "--config=" .. M.ilias_root .. "/CI/PHP-CS-FIXER/code-format.php_cs"
+	if major_version and major_version < 10 then
+		M.php_cs_fixer_config = M.ilias_root .. "/CI/PHP-CS-Fixer/code-format.php_cs"
+	else
+		M.php_cs_fixer_config = M.ilias_root .. "/scripts/PHP-CS-Fixer/code-format.php_cs"
 	end
 
 	if vim.fn.executable(M.ilias_root .. M.composer_base .. "/composer/vendor/bin/phpcs") == 1 then

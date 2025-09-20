@@ -19,7 +19,14 @@ vim.g.autoformat = false
 vim.opt.shell = "zsh"
 
 -- Set to "intelephense" to use intelephense instead of phpactor.
-vim.g.lazyvim_php_lsp = "intelephense"
+-- deactivated phpactor in lsp.lua; if I configure intelephense there, and define it here
+-- I end up having to servers running in parallel, one with my desired config and one without.
+-- vim.g.lazyvim_php_lsp = "intelephense"
 
--- disable swap files 
+-- disable swap files
 vim.opt.swapfile = false
+
+-- force root_dir to cwd
+-- vim.g.root_spec = { "cwd" }
+
+vim.g.snacks_animate = false

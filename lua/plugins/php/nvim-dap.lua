@@ -32,6 +32,15 @@ return {
 					["/var/www/html"] = home .. "/code/il_10/ilias_10",
 				},
 			},
+			{
+				type = "php",
+				request = "launch",
+				name = "il10_2",
+				port = 9003,
+				pathMappings = {
+					["/var/www/html"] = home .. "/code/il_10_2/ilias_10",
+				},
+			},
 		}
 	end,
 }

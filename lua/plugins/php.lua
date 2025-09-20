@@ -7,7 +7,7 @@ local function require_php_modules()
     "conform",
     "nvim-dap",
     "nvim-lint",
-    "nvim-lspconfig",
+    "lsp"
   }
   for _, name in ipairs(module_names) do
     local ok, mod = pcall(require, "plugins.php." .. name)

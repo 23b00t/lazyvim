@@ -7,3 +7,5 @@ foo.*
 *.log
 data
 .git*
+.vectorcode
+codecompanion-workspace.json

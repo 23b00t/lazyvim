@@ -65,6 +65,52 @@ end
 return {
 	"olimorris/codecompanion.nvim",
 	opts = {
+		extensions = {
+			-- NOTE: Installed vectorcode by: nix shell "nixpkgs#uv" "nixpkgs#gcc"
+			-- uv tool install "vectorcode<1.0.0"
+
+			---@module "vectorcode"
+			vectorcode = {
+				---@type VectorCode.CodeCompanion.ExtensionOpts
+				opts = {
+					tool_group = {
+						-- this will register a tool group called `@vectorcode_toolbox` that contains all 3 tools
+						enabled = true,
+						-- a list of extra tools that you want to include in `@vectorcode_toolbox`.
+						-- if you use @vectorcode_vectorise, it'll be very handy to include
+						-- `file_search` here.
+						extras = { "file_search" },
+						collapse = false, -- whether the individual tools should be shown in the chat
+					},
+					tool_opts = {
+						---@type VectorCode.CodeCompanion.ToolOpts
+						["*"] = {},
+						---@type VectorCode.CodeCompanion.LsToolOpts
+						ls = {},
+						---@type VectorCode.CodeCompanion.VectoriseToolOpts
+						vectorise = {},
+						---@type VectorCode.CodeCompanion.QueryToolOpts
+						query = {
+							max_num = { chunk = -1, document = -1 },
+							default_num = { chunk = 100, document = 20 },
+							include_stderr = false,
+							use_lsp = true,
+							no_duplicate = true,
+							chunk_mode = false,
+							---@type VectorCode.CodeCompanion.SummariseOpts
+							summarise = {
+								---@type boolean|(fun(chat: CodeCompanion.Chat, results: VectorCode.QueryResult[]):boolean)|nil
+								enabled = true,
+								-- adapter = nil,
+								query_augmented = true,
+							},
+						},
+						files_ls = {},
+						files_rm = {},
+					},
+				},
+			},
+		},
 		strategies = {
 			chat = {
 				opts = {
@@ -175,6 +221,10 @@ return {
 		},
 	},
 	dependencies = {
+		{
+			"Davidyz/VectorCode",
+			dependencies = { "nvim-lua/plenary.nvim" },
+		},
 		"nvim-lua/plenary.nvim",
 		"nvim-treesitter/nvim-treesitter",
 		{
@@ -199,6 +249,7 @@ return {
 		{ "<leader>aa", "<cmd>CodeCompanionChat<cr>", desc = " Open Chat", mode = { "n", "v" } },
 		{ "<leader>at", "<cmd>CodeCompanionChat Toggle<cr>", desc = " Toggle Chat", mode = { "n", "v" } },
 		{ "<leader>aq", ":'<,'>CodeCompanion<cr>", desc = " Enter Inline Cmd", mode = { "v" } },
+		{ "<leader>aq", "<cmd>CodeCompanion<cr>", desc = " Enter Inline Cmd", mode = { "n" } },
 		{ "<leader>am", "<cmd>CodeCompanionActions<cr>", desc = " Actions", mode = { "n", "v" } },
 		{ "<leader>ac", ":CodeCompanionCmd ", desc = "CodeCompanionCmd Prompt", mode = { "n" } },
 		{
@@ -227,4 +278,3 @@ return {
 		},
 	},
 }
-

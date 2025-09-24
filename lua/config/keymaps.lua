@@ -11,3 +11,7 @@ vim.keymap.set("v", "<leader>e", function()
 end, { desc = "Send visual selection to terminal" })
 
 vim.keymap.set({ "n", "v", "t" }, "<leader>t", "<cmd>ToggleTermToggleAll<CR>", { desc = "Toggle all terminals" })
+
+vim.keymap.set("n", "<leader>as", function()
+	require("copilot.suggestion").toggle_auto_trigger()
+end, { desc = "Toggle Shadow Text" })

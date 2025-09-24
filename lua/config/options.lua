@@ -30,3 +30,5 @@ vim.opt.swapfile = false
 -- vim.g.root_spec = { "cwd" }
 
 vim.g.snacks_animate = false
+
+vim.opt.clipboard = ""

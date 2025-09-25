@@ -17,6 +17,6 @@ vim.keymap.set("n", "<leader>as", function()
 end, { desc = "Toggle Shadow Text" })
 
 -- Copy visual selection to clipboard using wl-copy
-vim.keymap.set("v", "<leader>y", [[:'<,'>w !wl-copy<CR>]], { desc = "Copy to clipboard (wl-copy)" })
+-- vim.keymap.set("v", "<leader>y", [[:'<,'>w !wl-copy<CR>]], { desc = "Copy to clipboard (wl-copy)" })
 -- Paste clipboard contents at cursor using wl-paste
-vim.keymap.set("n", "<leader>v", [[:r !wl-paste<CR>]], { desc = "Paste from clipboard (wl-paste)" })
+-- vim.keymap.set("n", "<leader>v", [[:r !wl-paste<CR>]], { desc = "Paste from clipboard (wl-paste)" })

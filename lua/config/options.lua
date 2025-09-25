@@ -31,4 +31,5 @@ vim.opt.swapfile = false
 
 vim.g.snacks_animate = false
 
-vim.opt.clipboard = ""
+-- Optionally to prevent paperwm bug: https://github.com/paperwm/PaperWM/issues/1021
+-- vim.opt.clipboard = ""

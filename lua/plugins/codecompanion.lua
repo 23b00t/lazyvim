@@ -65,6 +65,17 @@ end
 return {
 	"olimorris/codecompanion.nvim",
 	opts = {
+		adapters = {
+			http = {
+				tavily = function()
+					return require("codecompanion.adapters").extend("tavily", {
+						env = {
+							api_key = "cmd:cat " .. os.getenv("HOME") .. "/.config/nvim/.tavily",
+						},
+					})
+				end,
+			},
+		},
 		extensions = {
 			-- NOTE: Installed vectorcode by: nix shell "nixpkgs#uv" "nixpkgs#gcc"
 			-- uv tool install "vectorcode<1.0.0"

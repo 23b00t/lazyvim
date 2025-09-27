@@ -6,11 +6,11 @@ vim.keymap.set({ "n" }, "<leader>bf", function()
 	Snacks.picker.buffers()
 end, { desc = "Buffer find", silent = true })
 
-vim.keymap.set("v", "<leader>e", function()
+vim.keymap.set("v", "<leader>ks", function()
 	require("toggleterm").send_lines_to_terminal("visual_selection", true, { args = vim.v.count })
 end, { desc = "Send visual selection to terminal" })
 
-vim.keymap.set({ "n", "v", "t" }, "<leader>t", "<cmd>ToggleTermToggleAll<CR>", { desc = "Toggle all terminals" })
+vim.keymap.set({ "n", "v", "t" }, "<leader>kt", "<cmd>ToggleTermToggleAll<CR>", { desc = "Toggle all terminals" })
 
 vim.keymap.set("n", "<leader>as", function()
 	require("copilot.suggestion").toggle_auto_trigger()

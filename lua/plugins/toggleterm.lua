@@ -14,6 +14,8 @@ return {
 					direction = "horizontal",
 					count = i,
 					hide_numbers = false,
+          autochdir = true,
+          dir = "git_dir",
 				})
 			end
 			terminals[9] = require("toggleterm.terminal").Terminal:new({

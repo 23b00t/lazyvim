@@ -9,15 +9,22 @@ return {
 			toggleterm.setup(opts)
 
 			local terminals = {}
-			for i = 1, 8 do
+			for i = 1, 7 do
 				terminals[i] = require("toggleterm.terminal").Terminal:new({
 					direction = "horizontal",
 					count = i,
 					hide_numbers = false,
-          autochdir = true,
-          dir = "git_dir",
+					autochdir = true,
+					dir = "git_dir",
 				})
 			end
+			terminals[8] = require("toggleterm.terminal").Terminal:new({
+				direction = "float",
+				count = 8,
+				hide_numbers = false,
+				autochdir = true,
+				dir = "git_dir",
+			})
 			terminals[9] = require("toggleterm.terminal").Terminal:new({
 				direction = "float",
 				count = 9,

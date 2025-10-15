@@ -20,3 +20,14 @@ end, { desc = "Toggle Shadow Text" })
 -- vim.keymap.set("v", "<leader>y", [[:'<,'>w !wl-copy<CR>]], { desc = "Copy to clipboard (wl-copy)" })
 -- Paste clipboard contents at cursor using wl-paste
 -- vim.keymap.set("n", "<leader>v", [[:r !wl-paste<CR>]], { desc = "Paste from clipboard (wl-paste)" })
+local function copy_current_buffer_path()
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == "" then
+    vim.notify("No path found!", vim.log.levels.WARN)
+    return
+  end
+  vim.fn.setreg("+", path)
+  vim.notify("Copied path: " .. path)
+end
+
+vim.keymap.set("n", "<leader>yY", copy_current_buffer_path, { desc = "Copy absolute path to clipboard" })

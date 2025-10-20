@@ -93,12 +93,13 @@ if M.in_ilias then
 		M.phpcs_bin = M.ilias_root .. M.composer_base .. "/composer/vendor/bin/phpcs"
 	end
 
-	if
-		vim.fn.filereadable(M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml")
-		== 1
-	then
-		-- M.phpcs_standard = M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml"
-		M.phpcs_standard = M.ilias_root .. "/../phpcs.xml"
+	local phpcs_up = M.ilias_root .. "/../phpcs.xml"
+	local phpcs_captainhook = M.ilias_root .. M.composer_base .. "/composer/vendor/captainhook/captainhook/phpcs.xml"
+
+	if vim.fn.filereadable(phpcs_up) == 1 then
+		M.phpcs_standard = phpcs_up
+	elseif vim.fn.filereadable(phpcs_captainhook) == 1 then
+		M.phpcs_standard = phpcs_captainhook
 	end
 end
 

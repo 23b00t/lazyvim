@@ -1,5 +1,9 @@
 local helpers = require("plugins.php.helpers")
 
+if helpers.in_ilias == false then
+  return {}
+end
+
 return {
 	"stevearc/conform.nvim",
 	optional = true,

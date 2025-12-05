@@ -3,6 +3,10 @@ Plugin specification for olimorris/codecompanion.nvim.
 
 Provides AI-powered code assistance, documentation generation, and chat features for Neovim.
 
+NOTE:
+[WARN] CodeCompanion.nvim will experience breaking changes soon. Pin to version v17.33.0 or earlier to avoid this.
+See: https://github.com/olimorris/codecompanion.nvim/pull/2439
+
 Dependencies:
 - nvim-lua/plenary.nvim: Utility functions for Neovim plugins.
 - nvim-treesitter/nvim-treesitter: Syntax parsing for enhanced code understanding.

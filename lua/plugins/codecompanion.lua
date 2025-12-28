@@ -68,6 +68,7 @@ end
 
 return {
 	"olimorris/codecompanion.nvim",
+	version = "v17.33.0",
 	opts = {
 		adapters = {
 			http = {

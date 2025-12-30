@@ -1,13 +1,9 @@
 return {
 	{
 		"habamax/vim-godot",
-		config = function()
-			-- Godot remote starten auf Host (über ssh)
-			vim.g.godot_executable = "ssh nx@10.0.0.254 godot"
-		end,
 	},
-	{ "skywind3000/asyncrun.vim" },
-	{ "teatek/gdscript-extended-lsp.nvim", opts = { view_type = "floating", picker = "snacks" } },
+	-- { "skywind3000/asyncrun.vim" },
+	{ "teatek/gdscript-extended-lsp.nvim" },
 	{
 		"mfussenegger/nvim-dap",
 		optional = true,
@@ -15,7 +11,7 @@ return {
 			local dap = require("dap")
 			dap.adapters.godot = {
 				type = "server",
-				host = "10.0.0.254",
+				host = "127.0.0.1",
 				port = 6007,
 			}
 			dap.configurations.gdscript = {
@@ -34,10 +30,35 @@ return {
 		opts = {
 			servers = {
 				gdscript = {
-					cmd = { "ncat", "10.0.0.254", "6005" }, -- schickt stdin/stdout zu Godot!
 					filetypes = { "gd", "gdscript" },
 				},
 			},
 		},
+	},
+	{
+		"stevearc/conform.nvim",
+		opts = {
+			formatters_by_ft = {
+				gdscript = { "gdformat" },
+				gd = { "gdformat" },
+			},
+		},
+		formatters = {
+			gdformat = { command = "gdformat" },
+		},
+	},
+	{
+		-- Set tab width for gd and gdscript files
+		"nvim-lua/plenary.nvim",
+		config = function()
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "gd", "gdscript" },
+				callback = function()
+					vim.opt_local.tabstop = 4
+					vim.opt_local.shiftwidth = 4
+					vim.opt_local.expandtab = true
+				end,
+			})
+		end,
 	},
 }

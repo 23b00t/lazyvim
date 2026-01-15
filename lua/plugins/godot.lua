@@ -7,7 +7,7 @@ return {
 			dap.adapters.godot = {
 				type = "server",
 				host = "127.0.0.1",
-				port = 6007,
+				port = 6006,
 			}
 			dap.configurations.gdscript = {
 				{
@@ -15,7 +15,7 @@ return {
 					request = "launch",
 					name = "Debug Godot Scene",
 					project = "${workspaceFolder}",
-					launch_scene = true,
+					-- launch_scene = true,
 				},
 			}
 		end,
@@ -66,6 +66,10 @@ return {
 	{
 		"habamax/vim-godot",
 		dependencies = { "junegunn/fzf.vim" },
+		config = function()
+			vim.g.godot_executable =
+				"/etc/profiles/per-user/nx/bin/flatpak --user run -- org.godotengine.Godot > /tmp/godot.log 2>&1"
+		end,
 	},
 	{ "skywind3000/asyncrun.vim" },
 	-- {

@@ -59,6 +59,51 @@ return {
 					["/var/www/html"] = home .. "/code/il_10_2/ilias_10",
 				},
 			},
+			{
+				type = "php",
+				request = "launch",
+				name = "il10_new",
+				port = 9003,
+				pathMappings = {
+					["/var/www/html"] = home .. "/code/il_10_new/ilias_10",
+				},
+			},
+			{
+				type = "php",
+				request = "launch",
+				name = "il9_chart",
+				port = 9003,
+				pathMappings = {
+					["/var/www/html"] = home .. "/code/il_9_chart/ilias_9",
+				},
+			},
+			{
+				type = "php",
+				request = "launch",
+				name = "il10_auth",
+				port = 9003,
+				pathMappings = {
+					["/var/www/html"] = home .. "/code/il_10_auth/ilias_10",
+				},
+			},
+			{
+				type = "php",
+				request = "launch",
+				name = "il11_auth",
+				port = 9003,
+				pathMappings = {
+					["/var/www/html"] = home .. "/code/il_11_auth/ilias_11",
+				},
+			},
+			{
+				type = "php",
+				request = "launch",
+				name = "il12_auth",
+				port = 9003,
+				pathMappings = {
+					["/var/www/html"] = home .. "/code/il_12_auth/ilias_12",
+				},
+			},
 		}
 	end,
 }

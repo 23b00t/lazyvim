@@ -31,3 +31,5 @@ local function copy_current_buffer_path()
 end
 
 vim.keymap.set("n", "<leader>yY", copy_current_buffer_path, { desc = "Copy absolute path to clipboard" })
+
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Goto Definition (LSP)" })

@@ -120,6 +120,7 @@ return {
 							"components",
 							"vendor",
 							"Customizing/global/plugins",
+              "public/Customizing/global/plugins",
 							"setup",
 						},
 					},

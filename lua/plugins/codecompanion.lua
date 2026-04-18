@@ -4,9 +4,6 @@ Plugin specification for olimorris/codecompanion.nvim.
 Provides AI-powered code assistance, documentation generation, and chat features for Neovim.
 
 NOTE:
-[WARN] CodeCompanion.nvim will experience breaking changes soon. Pin to version v17.33.0 or earlier to avoid this.
-See: https://github.com/olimorris/codecompanion.nvim/pull/2439
-
 Dependencies:
 - nvim-lua/plenary.nvim: Utility functions for Neovim plugins.
 - nvim-treesitter/nvim-treesitter: Syntax parsing for enhanced code understanding.
@@ -50,28 +47,42 @@ Keybindings:
 -- @return function: Function that takes a context and returns the system role string.
 local function system_role_suffix(suffix)
 	return function(context)
-		return "You are an expert " .. context.filetype .. suffix
-	end
-end
-
---- Returns a function that generates a user prompt including instructions and selected code.
--- @param prefix string: Prefix for the instructions (e.g., "\nWrite documentation comments...").
--- @return function: Function that takes a context and returns the user prompt string.
-local function user_with_code(prefix)
-	return function(context)
-		local get_code = require("codecompanion.helpers.actions").get_code
-		local text = get_code(context.start_line, context.end_line)
-		local instructions = context.instructions or ""
-		return instructions .. prefix .. "\n" .. text
+		return "You are an expert " .. (context.filetype or "code") .. suffix
 	end
 end
 
 return {
 	"olimorris/codecompanion.nvim",
-	version = "v17.33.0",
+	version = "v19.11.0",
 	opts = {
 		adapters = {
 			http = {
+				copilot = function()
+					return require("codecompanion.adapters").extend("copilot", {
+						schema = {
+							top_p = {
+								enabled = function(self)
+									local model = self.schema.model.default
+									if type(model) == "function" then
+										model = model()
+									end
+									return not vim.startswith(model, "o1") and not vim.startswith(model, "gpt-5")
+								end,
+							},
+							temperature = {
+								enabled = function(self)
+									local model = self.schema.model.default
+									if type(model) == "function" then
+										model = model()
+									end
+									return not vim.startswith(model, "o1")
+										and not model:find("codex")
+										and not vim.startswith(model, "gpt-5")
+								end,
+							},
+						},
+					})
+				end,
 				tavily = function()
 					return require("codecompanion.adapters").extend("tavily", {
 						env = {
@@ -79,6 +90,19 @@ return {
 						},
 					})
 				end,
+			},
+		},
+		interactions = {
+			chat = {
+				tools = {
+					["memory"] = {
+						opts = {
+							whitelist = {
+								{ path = "~/.dotfiles/PERSONAL.md", as = "/personal" },
+							},
+						},
+					},
+				},
 			},
 		},
 		extensions = {
@@ -127,11 +151,16 @@ return {
 				},
 			},
 		},
+		display = {
+			chat = {
+				show_settings = false,
+			},
+			inline = {
+				layout = "buffer",
+			},
+		},
 		strategies = {
 			chat = {
-				opts = {
-					completion_provider = "cmp", -- blink|cmp|coc|default
-				},
 				keymaps = {
 					completion = { modes = { i = "<C-\\>" } },
 					regenerate = { modes = { n = "<localleader>qr" } },
@@ -139,28 +168,19 @@ return {
 					clear = { modes = { n = "<localleader>qx" } },
 					codeblock = { modes = { n = "<localleader>qc" } },
 					yank_code = { modes = { n = "<localleader>qy" } },
-					pin = { modes = { n = "<localleader>qp" } },
-					watch = { modes = { n = "<localleader>qw" } },
+					-- pin = { modes = { n = "<localleader>qp" } },
+					-- watch = { modes = { n = "<localleader>qw" } },
 					change_adapter = { modes = { n = "<localleader>qa" } },
 					fold_code = { modes = { n = "<localleader>qf" } },
 					debug = { modes = { n = "<localleader>qd" } },
 					system_prompt = { modes = { n = "<localleader>qs" } },
-					memory = { modes = { n = "<localleader>qM" } },
+					-- memory = { modes = { n = "<localleader>qM" } },
 					yolo_mode = { modes = { n = "<localleader>qty" } },
 					goto_file_under_cursor = { modes = { n = "<localleader>qR" } },
 					copilot_stats = { modes = { n = "<localleader>qS" } },
-					super_diff = { modes = { n = "<localleader>qD" } },
+					-- super_diff = { modes = { n = "<localleader>qD" } },
 				},
 			},
-		},
-		providers = {
-			copilot = { enabled = true },
-			githubmodels = { enabled = true },
-		},
-		shadow_text = {
-			enabled = true,
-			debounce = 150,
-			highlight = "Comment",
 		},
 		-- normalized keys to match the keybindings below
 		prompt_library = {
@@ -181,7 +201,7 @@ return {
 					},
 					{
 						role = "user",
-						content = user_with_code("\nWrite documentation comments for the following selected code:"),
+						content = "Write documentation comments for the following selected code.",
 						opts = { contains_code = true },
 					},
 				},
@@ -203,9 +223,7 @@ return {
 					},
 					{
 						role = "user",
-						content = user_with_code(
-							"\nUpdate the documentation comments for the following selected code, don't change anything, just add and remove documentation comments for new or removed code:"
-						),
+						content = "Update the documentation comments for the following selected code, don't change anything, just add and remove documentation comments for new or removed code.",
 						opts = { contains_code = true },
 					},
 				},
@@ -227,9 +245,7 @@ return {
 					},
 					{
 						role = "user",
-						content = user_with_code(
-							"\nWrite comments to document the code for the following selected code. Please ensure that every significant step in the code is documented with clear, concise comments that explain its functionality, following best practices for code documentation. Comments should help readers understand the purpose and logic of each major section or operation:"
-						),
+						content = "Write comments to document the code for the following selected code. Please ensure that every significant step in the code is documented with clear, concise comments that explain its functionality, following best practices for code documentation. Comments should help readers understand the purpose and logic of each major section or operation.",
 						opts = { contains_code = true },
 					},
 				},

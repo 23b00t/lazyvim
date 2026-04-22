@@ -53,44 +53,24 @@ end
 
 return {
 	"olimorris/codecompanion.nvim",
-	version = "v19.11.0",
+  version = "v19.11.0",
 	opts = {
 		adapters = {
-			http = {
-				copilot = function()
-					return require("codecompanion.adapters").extend("copilot", {
-						schema = {
-							top_p = {
-								enabled = function(self)
-									local model = self.schema.model.default
-									if type(model) == "function" then
-										model = model()
-									end
-									return not vim.startswith(model, "o1") and not vim.startswith(model, "gpt-5")
-								end,
-							},
-							temperature = {
-								enabled = function(self)
-									local model = self.schema.model.default
-									if type(model) == "function" then
-										model = model()
-									end
-									return not vim.startswith(model, "o1")
-										and not model:find("codex")
-										and not vim.startswith(model, "gpt-5")
-								end,
-							},
-						},
-					})
-				end,
-				tavily = function()
-					return require("codecompanion.adapters").extend("tavily", {
-						env = {
-							api_key = "cmd:cat " .. os.getenv("HOME") .. "/.config/nvim/.tavily",
-						},
-					})
-				end,
-			},
+		adapters = {
+			copilot = function()
+				local adapter = require("codecompanion.adapters").extend("copilot", {})
+				-- Forcefully delete these parameters so the request builder never sees them
+				adapter.schema.top_p = nil
+				adapter.schema.temperature = nil
+				return adapter
+			end,
+			tavily = function()
+				return require("codecompanion.adapters").extend("tavily", {
+					env = {
+						api_key = "cmd:cat " .. os.getenv("HOME") .. "/.config/nvim/.tavily",
+					},
+				})
+			end,
 		},
 		interactions = {
 			chat = {

@@ -53,24 +53,25 @@ end
 
 return {
 	"olimorris/codecompanion.nvim",
-  version = "v19.11.0",
+	version = "v19.11.0",
 	opts = {
 		adapters = {
-		adapters = {
-			copilot = function()
-				local adapter = require("codecompanion.adapters").extend("copilot", {})
-				-- Forcefully delete these parameters so the request builder never sees them
-				adapter.schema.top_p = nil
-				adapter.schema.temperature = nil
-				return adapter
-			end,
-			tavily = function()
-				return require("codecompanion.adapters").extend("tavily", {
-					env = {
-						api_key = "cmd:cat " .. os.getenv("HOME") .. "/.config/nvim/.tavily",
-					},
-				})
-			end,
+			http = {
+				copilot = function()
+					local adapter = require("codecompanion.adapters").extend("copilot", {})
+					-- Forcefully delete these parameters so the request builder never sees them
+					adapter.schema.top_p = nil
+					adapter.schema.temperature = nil
+					return adapter
+				end,
+				tavily = function()
+					return require("codecompanion.adapters").extend("tavily", {
+						env = {
+							api_key = "cmd:cat " .. os.getenv("HOME") .. "/.config/nvim/.tavily",
+						},
+					})
+				end,
+			},
 		},
 		interactions = {
 			chat = {

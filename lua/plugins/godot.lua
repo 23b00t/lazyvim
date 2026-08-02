@@ -22,14 +22,16 @@ return {
 	},
 	{
 		"neovim/nvim-lspconfig",
-		config = function()
-			require("lspconfig").gdscript.setup({
+		opts = function(_, opts)
+			opts.servers = opts.servers or {}
+			opts.servers.gdscript = vim.tbl_deep_extend("force", opts.servers.gdscript or {}, {
 				filetypes = { "gd", "gdscript" },
 				root_dir = function(fname)
 					return require("lspconfig.util").root_pattern("project.godot")(fname)
 						or require("lspconfig.util").root_pattern(".git")(fname)
 				end,
 			})
+			return opts
 		end,
 	},
 	{

@@ -20,11 +20,9 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = { "mason-org/mason-lspconfig.nvim" },
-    config = function()
-      local lspconfig = require("lspconfig")
-
-      -- tsserver = typescript-language-server (works for JS too)
-      lspconfig.tsserver.setup({
+    opts = function(_, opts)
+      opts.servers = opts.servers or {}
+      opts.servers.tsserver = vim.tbl_deep_extend("force", opts.servers.tsserver or {}, {
         filetypes = {
           "javascript",
           "javascriptreact",
@@ -34,6 +32,7 @@ return {
           "typescript.tsx",
         },
       })
+      return opts
     end,
   },
 }

@@ -3,16 +3,8 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        nil_ls = false,
-        nixd = {
-          settings = {
-            nixd = {
-              formatting = {
-                command = { "nixfmt" },
-              },
-            },
-          },
-        },
+        nil_ls = {},
+        nixd = false,
       },
     },
   },

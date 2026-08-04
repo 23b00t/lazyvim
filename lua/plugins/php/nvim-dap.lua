@@ -17,6 +17,15 @@ return {
 			{
 				type = "php",
 				request = "launch",
+				name = "alp",
+				port = 9003,
+				pathMappings = {
+					["/var/www/html"] = home .. "/code/il_12_alp/ilias",
+				},
+			},
+			{
+				type = "php",
+				request = "launch",
 				name = "il9",
 				port = 9003,
 				pathMappings = {

@@ -11,7 +11,7 @@ return {
     "mason-org/mason-lspconfig.nvim",
     dependencies = { "mason-org/mason.nvim" },
     opts = {
-      ensure_installed = { "tsserver" },
+      -- ensure_installed = { "tsserver" },
       automatic_installation = true,
     },
   },

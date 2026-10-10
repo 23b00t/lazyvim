@@ -9,6 +9,8 @@ end
 return {
   "folke/sidekick.nvim",
   opts = {
+    -- Next edit suggestions off by default (Copilot Free quota); toggle with <leader>uN, see README.
+    nes = { enabled = false },
     -- Persist CLI sessions in zellij, so detach (<leader>ad) keeps Claude running.
     cli = { mux = { backend = "zellij", enabled = true } },
   },

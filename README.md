@@ -3,6 +3,23 @@
 A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
 Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
 
+## Copilot: Next Edit Suggestions (NES)
+
+Der Shadow-Text (Inline Completion) ergänzt Code an der Cursorposition.
+NES schlägt dagegen, ausgehend von deiner letzten Änderung, die nächste
+passende Änderung an anderer Stelle in der Datei vor, z. B. weitere Stellen
+einer Umbenennung. Beides läuft über Copilot (sidekick.nvim) und belastet das
+Kontingent von Copilot Free, deshalb ist NES standardmäßig aus.
+
+| Taste | Funktion |
+|---|---|
+| `<leader>uN` | NES für die laufende Sitzung an/aus |
+| `<Tab>` (Normal) | zum Vorschlag springen, nochmal `<Tab>` übernimmt ihn |
+| `<Tab>` (Insert) | Snippet-Sprung, sonst NES übernehmen, sonst Shadow-Text übernehmen |
+
+Dauerhaft aktivieren: in `lua/plugins/sidekick.lua` die Zeile
+`nes = { enabled = false },` entfernen.
+
 ## Git Review (AI-Änderungen im Editor prüfen)
 
 Diff direkt im normalen Buffer – LSP, Navigation und Editieren bleiben verfügbar.

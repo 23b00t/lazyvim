@@ -35,6 +35,20 @@ vim.g.snacks_animate = false
 -- vim.opt.clipboard = ""
 -- vim.g.clipboard = 'osc52'
 vim.opt.clipboard = "unnamedplus"
+-- wl-clipboard provider with a paste timeout: if the selection owner never answers,
+-- wl-paste would block forever and freeze nvim (e.g. which-key's register preview reads "*" and "+").
+vim.g.clipboard = {
+	name = "wl-clipboard-timeout",
+	copy = {
+		["+"] = { "wl-copy", "--type", "text/plain" },
+		["*"] = { "wl-copy", "--primary", "--type", "text/plain" },
+	},
+	paste = {
+		["+"] = { "timeout", "1", "wl-paste", "--no-newline" },
+		["*"] = { "timeout", "1", "wl-paste", "--no-newline", "--primary" },
+	},
+	cache_enabled = 1,
+}
 -- Function to copy text using OSC52
 local function osc52_copy(text)
 	-- Base64 encoding with Lua (faster and more robust than system calls)

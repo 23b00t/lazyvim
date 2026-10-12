@@ -71,7 +71,7 @@ if M.in_ilias then
 		M.composer_base = "/libs"
 	end
 
-	if vim.fn.filereadable(M.ilias_root .. "../phpstan.neon") == 1 then
+	if vim.fn.filereadable(M.ilias_root .. "/../phpstan.neon") == 1 then
 		M.phpstan_config = M.ilias_root .. "/../phpstan.neon"
 	end
 

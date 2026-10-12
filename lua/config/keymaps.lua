@@ -6,12 +6,6 @@ vim.keymap.set({ "n" }, "<leader>bf", function()
 	Snacks.picker.buffers()
 end, { desc = "Buffer find", silent = true })
 
-vim.keymap.set("v", "<leader>ks", function()
-	require("toggleterm").send_lines_to_terminal("visual_selection", true, { args = vim.v.count })
-end, { desc = "Send visual selection to terminal" })
-
-vim.keymap.set({ "n", "v", "t" }, "<leader>kt", "<cmd>ToggleTermToggleAll<CR>", { desc = "Toggle all terminals" })
-
 Snacks.toggle({
 	name = "Copilot Shadow Text",
 	get = function()
@@ -77,10 +71,6 @@ vim.keymap.set("i", "<A-b>", function()
 	vim.lsp.inline_completion.select({ count = -1 })
 end, { desc = "Copilot: previous suggestion" })
 
--- Copy visual selection to clipboard using wl-copy
--- vim.keymap.set("v", "<leader>y", [[:'<,'>w !wl-copy<CR>]], { desc = "Copy to clipboard (wl-copy)" })
--- Paste clipboard contents at cursor using wl-paste
--- vim.keymap.set("n", "<leader>v", [[:r !wl-paste<CR>]], { desc = "Paste from clipboard (wl-paste)" })
 local function copy_current_buffer_path()
   local path = vim.api.nvim_buf_get_name(0)
   if path == "" then

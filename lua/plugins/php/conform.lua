@@ -15,7 +15,6 @@ return {
 		opts.formatters.php_cs_fixer = {
 			command = helpers.php_cs_fixer_bin,
 			args = {
-        -- "--rules=@PSR12",
         "--config=" .. (helpers.php_cs_fixer_config or ""),
         "--using-cache=no",
 				"fix",

@@ -35,40 +35,46 @@ vim.g.snacks_animate = false
 -- vim.opt.clipboard = ""
 -- vim.g.clipboard = 'osc52'
 vim.opt.clipboard = "unnamedplus"
--- wl-clipboard provider with a paste timeout: if the selection owner never answers,
--- wl-paste would block forever and freeze nvim (e.g. which-key's register preview reads "*" and "+").
-vim.g.clipboard = {
-	name = "wl-clipboard-timeout",
-	copy = {
-		["+"] = { "wl-copy", "--type", "text/plain" },
-		["*"] = { "wl-copy", "--primary", "--type", "text/plain" },
-	},
-	paste = {
-		["+"] = { "timeout", "1", "wl-paste", "--no-newline" },
-		["*"] = { "timeout", "1", "wl-paste", "--no-newline", "--primary" },
-	},
-	cache_enabled = 1,
-}
--- Function to copy text using OSC52
-local function osc52_copy(text)
-	-- Base64 encoding with Lua (faster and more robust than system calls)
-	local b64 = vim.base64.encode(text)
-	-- Build OSC52 sequence
-	local osc = string.format("\x1b]52;c;%s\x07", b64)
-	-- Send to stderr (often more reliable for escape codes than stdout in nvim TUI)
-	vim.api.nvim_chan_send(vim.v.stderr, osc)
+
+--- Whether a usable Wayland session is reachable (local, or forwarded e.g. via wprs).
+--- Checks the socket too: a zellij session started under Wayland and later attached
+--- via plain ssh still inherits a WAYLAND_DISPLAY whose socket may be gone.
+--- @return boolean
+local function has_wayland_clipboard()
+	local display = vim.env.WAYLAND_DISPLAY
+	if not display or vim.fn.executable("wl-copy") == 0 then
+		return false
+	end
+	local socket = display:sub(1, 1) == "/" and display or ((vim.env.XDG_RUNTIME_DIR or "") .. "/" .. display)
+	return vim.uv.fs_stat(socket) ~= nil
 end
 
--- Autocmd to copy yanked text to host clipboard using OSC52
-vim.api.nvim_create_autocmd("TextYankPost", {
-	callback = function()
-		local event = vim.v.event
-		if event.operator == "y" and event.regname == "" then -- nur Standardregister
-			local yanked = vim.fn.getreg('"')
-			if yanked and #yanked > 0 then
-				osc52_copy(yanked)
-			end
-		end
-	end,
-	desc = "Copy yanked text to host clipboard (OSC52)",
-})
+if has_wayland_clipboard() then
+	-- wl-clipboard with a paste timeout: if the selection owner never answers, wl-paste
+	-- would block forever and freeze nvim (e.g. which-key's register preview reads "*" and "+").
+	vim.g.clipboard = {
+		name = "wl-clipboard-timeout",
+		copy = {
+			["+"] = { "wl-copy", "--type", "text/plain" },
+			["*"] = { "wl-copy", "--primary", "--type", "text/plain" },
+		},
+		paste = {
+			["+"] = { "timeout", "1", "wl-paste", "--no-newline" },
+			["*"] = { "timeout", "1", "wl-paste", "--no-newline", "--primary" },
+		},
+		cache_enabled = 1,
+	}
+else
+	-- No Wayland (e.g. ssh into a VM): copy to the host clipboard via OSC52, which passes
+	-- through zellij/kitty/foot. zellij does not forward OSC52 paste queries, so paste from
+	-- the unnamed register; use the terminal's paste (Ctrl+Shift+V) for host -> VM.
+	local osc52 = require("vim.ui.clipboard.osc52")
+	local function paste()
+		return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+	end
+	vim.g.clipboard = {
+		name = "osc52-copy-only",
+		copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+		paste = { ["+"] = paste, ["*"] = paste },
+	}
+end

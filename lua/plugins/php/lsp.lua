@@ -110,7 +110,7 @@ return {
 					},
 
 					environment = {
-						phpVersion = helpers.php_version() or "8.1",
+						phpVersion = (helpers.in_laravel and helpers.project_php_version()) or helpers.php_version() or "8.1",
 						-- TODO: Add more path?
 						includePaths = {
 							"Services",

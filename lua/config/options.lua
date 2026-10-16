@@ -22,6 +22,9 @@ vim.g.snacks_animate = false
 
 vim.opt.clipboard = "unnamedplus"
 
+-- Cap suggestion search time; long German compound words otherwise block for seconds.
+vim.opt.spellsuggest = "timeout:1500,best"
+
 --- Whether a usable Wayland session is reachable (local, or forwarded e.g. via wprs).
 --- Checks the socket too: a zellij session started under Wayland and later attached
 --- via plain ssh still inherits a WAYLAND_DISPLAY whose socket may be gone.

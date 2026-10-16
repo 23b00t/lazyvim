@@ -17,5 +17,6 @@ return {
       end
     end
     vim.g["plantuml_previewer#save_format"] = "svg"
+    vim.g["plantuml_previewer#viewer_path"] = vim.fn.expand("~/.cache/plantuml-previewer")
   end,
 }

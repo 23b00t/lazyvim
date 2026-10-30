@@ -9,10 +9,11 @@ Der Shadow-Text (Inline Completion) ergänzt Code an der Cursorposition.
 NES schlägt dagegen, ausgehend von deiner letzten Änderung, die nächste
 passende Änderung an anderer Stelle in der Datei vor, z. B. weitere Stellen
 einer Umbenennung. Beides läuft über Copilot (sidekick.nvim) und belastet das
-Kontingent von Copilot Free, deshalb ist NES standardmäßig aus.
+Kontingent von Copilot Free, deshalb sind beide standardmäßig aus.
 
 | Taste | Funktion |
 |---|---|
+| `<leader>ai` | Shadow-Text für die laufende Sitzung an/aus |
 | `<leader>uN` | NES für die laufende Sitzung an/aus |
 | `<Tab>` (Normal) | zum Vorschlag springen, nochmal `<Tab>` übernimmt ihn |
 | `<Tab>` (Insert) | Snippet-Sprung, sonst NES übernehmen, sonst Shadow-Text übernehmen |

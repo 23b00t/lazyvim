@@ -7,34 +7,51 @@ local function cli(fn, opts)
 end
 
 return {
-  "folke/sidekick.nvim",
-  opts = {
-    -- Next edit suggestions off by default (Copilot Free quota); toggle with <leader>uN, see README.
-    nes = { enabled = false },
-    -- Persist CLI sessions in zellij, so detach (<leader>ad) keeps Claude running.
-    cli = { mux = { backend = "zellij", enabled = true } },
-  },
-  -- stylua: ignore
-  keys = {
-    { "<c-.>", cli("focus"), desc = "Sidekick Focus", mode = { "n", "t", "i", "x" } },
-    { "<leader>aa", cli("toggle"), desc = "Sidekick Toggle Claude" },
-    { "<leader>ad", cli("close"), desc = "Detach Claude Session" },
-    { "<leader>at", cli("send", { msg = "{this}" }), mode = { "x", "n" }, desc = "Send This" },
-    { "<leader>af", cli("send", { msg = "{file}" }), desc = "Send File" },
-    { "<leader>av", cli("send", { msg = "{selection}" }), mode = { "x" }, desc = "Send Visual Selection" },
-    {
-      "<leader>ap",
-      function()
-        require("sidekick.cli").prompt({
-          cb = function(_, text)
-            if text then
-              require("sidekick.cli").send({ text = text, name = "claude" })
-            end
-          end,
-        })
-      end,
-      mode = { "n", "x" },
-      desc = "Sidekick Select Prompt",
+  {
+    "folke/sidekick.nvim",
+    opts = {
+      -- Next edit suggestions off by default (Copilot Free quota); toggle with <leader>uN, see README.
+      nes = { enabled = false },
+      -- Persist CLI sessions in zellij, so detach (<leader>ad) keeps Claude running.
+      cli = { mux = { backend = "zellij", enabled = true } },
     },
+    -- stylua: ignore
+    keys = {
+      { "<c-.>", cli("focus"), desc = "Sidekick Focus", mode = { "n", "t", "i", "x" } },
+      { "<leader>aa", cli("toggle"), desc = "Sidekick Toggle Claude" },
+      { "<leader>ad", cli("close"), desc = "Detach Claude Session" },
+      { "<leader>at", cli("send", { msg = "{this}" }), mode = { "x", "n" }, desc = "Send This" },
+      { "<leader>af", cli("send", { msg = "{file}" }), desc = "Send File" },
+      { "<leader>av", cli("send", { msg = "{selection}" }), mode = { "x" }, desc = "Send Visual Selection" },
+      {
+        "<leader>ap",
+        function()
+          require("sidekick.cli").prompt({
+            cb = function(_, text)
+              if text then
+                require("sidekick.cli").send({ text = text, name = "claude" })
+              end
+            end,
+          })
+        end,
+        mode = { "n", "x" },
+        desc = "Sidekick Select Prompt",
+      },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    opts = function(_, opts)
+      -- Shadow text off by default; toggle with <leader>ai. The copilot-native extra
+      -- schedules enable() in its setup, so schedule the disable right after it.
+      local setup = opts.setup.copilot
+      opts.setup.copilot = function(...)
+        local ret = setup(...)
+        vim.schedule(function()
+          vim.lsp.inline_completion.enable(false)
+        end)
+        return ret
+      end
+    end,
   },
 }
